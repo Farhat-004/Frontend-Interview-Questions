@@ -225,3 +225,374 @@ When you're in a React or Next.js interview, remember that interviewers aren't j
 Also, be ready to discuss real projects you've built. Talk about decisions you made, problems you solved, and what you learned. If you haven't used something in real projects, be honest about it. Saying "I haven't built with that yet but I understand how it works" is better than pretending you have experience. And don't be afraid to ask clarifying questions—good developers ask questions to understand requirements better.
 
 Finally, stay updated. React and Next.js evolve quickly. Make sure you understand the newer features like Server Components, the App Router, and Suspense. These are becoming standard, and interviewers expect you to know about them.
+
+---
+
+## **Additional React Interview Questions**
+
+### **What are React keys and why are they important?**
+
+React keys help React identify which items in a list changed, were added, or removed. They are especially important when rendering repeated elements because they help React keep the UI efficient and predictable.
+
+```jsx
+const items = ["Apple", "Banana", "Cherry"];
+
+function FruitList() {
+    return (
+        <ul>
+            {items.map((item) => (
+                <li key={item}>{item}</li>
+            ))}
+        </ul>
+    );
+}
+```
+
+### **What is reconciliation in React?**
+
+Reconciliation is the process React uses to compare the previous UI tree with the new one and decide what needs to be updated. This is what makes React efficient when state changes.
+
+```jsx
+function Counter() {
+    const [count, setCount] = React.useState(0);
+
+    return (
+        <div>
+            <p>Count: {count}</p>
+            <button onClick={() => setCount(count + 1)}>Increment</button>
+        </div>
+    );
+}
+```
+
+### **What is the difference between `useRef` and `useState`?**
+
+`useRef` is used to hold values that do not trigger a re-render, while `useState` is used for values that should cause the component to update and display new UI.
+
+```jsx
+function InputFocus() {
+    const inputRef = React.useRef(null);
+
+    return (
+        <div>
+            <input ref={inputRef} />
+            <button onClick={() => inputRef.current.focus()}>Focus</button>
+        </div>
+    );
+}
+```
+
+### **What are React Fragments?**
+
+React Fragments let you group multiple elements without adding extra nodes to the DOM. They are useful when you want to return multiple children from a component.
+
+```jsx
+function Profile() {
+    return (
+        <>
+            <h2>John Doe</h2>
+            <p>Frontend Developer</p>
+        </>
+    );
+}
+```
+
+### **What is the difference between `useEffect` and `useLayoutEffect`?**
+
+`useEffect` runs after the browser paints, while `useLayoutEffect` runs synchronously after DOM mutations but before the browser paints. `useLayoutEffect` is useful when you need to measure layout immediately.
+
+```jsx
+function Box() {
+    React.useLayoutEffect(() => {
+        console.log("Layout effect ran");
+    }, []);
+
+    return <div>Box</div>;
+}
+```
+
+### **What are Error Boundaries in React?**
+
+Error boundaries catch JavaScript errors in child components and prevent the whole app from crashing. They are useful for showing a fallback UI instead of a blank screen.
+
+```jsx
+class ErrorBoundary extends React.Component {
+    state = { hasError: false };
+
+    static getDerivedStateFromError() {
+        return { hasError: true };
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return <h2>Something went wrong.</h2>;
+        }
+
+        return this.props.children;
+    }
+}
+```
+
+### **What is lifting state up?**
+
+Lifting state up means moving shared state to the closest common parent so multiple components can use and update it together.
+
+```jsx
+function Parent() {
+    const [value, setValue] = React.useState("");
+
+    return (
+        <div>
+            <Input value={value} onChange={setValue} />
+            <Display value={value} />
+        </div>
+    );
+}
+
+function Input({ value, onChange }) {
+    return <input value={value} onChange={(e) => onChange(e.target.value)} />;
+}
+
+function Display({ value }) {
+    return <p>{value}</p>;
+}
+```
+
+### **What is the purpose of `React.StrictMode`?**
+
+`React.StrictMode` helps detect potential problems during development by intentionally double-invoking certain lifecycle methods and hooks.
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+);
+```
+
+### **How do you handle events in React?**
+
+React events are written in camelCase and passed as functions. They work similarly to DOM events, but with a React-friendly syntax.
+
+```jsx
+function Button() {
+    const handleClick = () => {
+        alert("Button clicked");
+    };
+
+    return <button onClick={handleClick}>Click Me</button>;
+}
+```
+
+### **What is a custom hook in React?**
+
+A custom hook is a reusable function that contains logic shared by multiple components. It helps keep components clean and focused.
+
+```jsx
+function useWindowWidth() {
+    const [width, setWidth] = React.useState(window.innerWidth);
+
+    React.useEffect(() => {
+        const handleResize = () => setWidth(window.innerWidth);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    return width;
+}
+```
+
+### **What is `forwardRef` used for?**
+
+`forwardRef` lets a component expose a ref to a child DOM element or component so the parent can interact with it directly.
+
+```jsx
+const FancyInput = React.forwardRef(function FancyInput(props, ref) {
+    return <input ref={ref} {...props} />;
+});
+```
+
+### **What is the purpose of portals in React?**
+
+Portals let you render children into a different part of the DOM tree, which is useful for modals, tooltips, and overlays.
+
+```jsx
+function Modal() {
+    return ReactDOM.createPortal(<div>Modal Content</div>, document.body);
+}
+```
+
+---
+
+## **Additional Next.js Interview Questions**
+
+### **What is the difference between `<Link>` and `<a>` in Next.js?**
+
+`<Link>` is the preferred way to navigate between pages in Next.js because it enables client-side navigation and prefetching, while `<a>` is a plain HTML anchor.
+
+```jsx
+import Link from "next/link";
+
+export default function Nav() {
+    return (
+        <nav>
+            <Link href="/about">About</Link>
+        </nav>
+    );
+}
+```
+
+### **How do dynamic routes work in Next.js?**
+
+Dynamic routes let you create pages that depend on a parameter in the URL, such as a product ID or blog slug.
+
+```jsx
+export default function PostPage({ params }) {
+    return <h1>Post: {params.slug}</h1>;
+}
+```
+
+### **What is `redirect` in the App Router?**
+
+`redirect` is used to send users to another route from a server component or server action when certain conditions are met.
+
+```jsx
+import { redirect } from "next/navigation";
+
+export default function Page() {
+    redirect("/login");
+}
+```
+
+### **What are `loading.tsx` and `error.tsx` files?**
+
+These special files let you provide loading and error states for routes in the App Router without building them manually in every page.
+
+```tsx
+export default function Loading() {
+    return <p>Loading...</p>;
+}
+```
+
+### **What is `revalidatePath` in Next.js?**
+
+`revalidatePath` tells Next.js to invalidate cached data for a specific route so the next request can regenerate it.
+
+```js
+import { revalidatePath } from "next/cache";
+
+export async function POST() {
+    revalidatePath("/posts");
+    return Response.json({ success: true });
+}
+```
+
+### **What are route groups in Next.js?**
+
+Route groups let you organize files in the app directory without affecting the URL structure. They are useful for separating layouts or sections of an app.
+
+```txt
+app/(marketing)/about/page.tsx
+app/(dashboard)/settings/page.tsx
+```
+
+### **What are Server Actions in Next.js?**
+
+Server Actions allow you to run server-side logic directly from a form or event handler in a Next.js application.
+
+```tsx
+"use server";
+
+export async function createPost(formData) {
+    console.log(formData.get("title"));
+}
+```
+
+### **What is the Edge Runtime in Next.js?**
+
+The Edge Runtime runs code closer to the user, which makes it useful for middleware, geo-based logic, and low-latency request handling.
+
+```ts
+export const runtime = "edge";
+
+export default function Page() {
+  return <div>Fast edge page</div>;
+}
+```
+
+### **What is the purpose of middleware in Next.js?**
+
+Middleware runs before a request completes and can be used for authentication, redirects, headers, or request rewriting.
+
+```ts
+import { NextResponse } from "next/server";
+
+export function middleware(request) {
+    return NextResponse.redirect(new URL("/login", request.url));
+}
+```
+
+### **How do you use the metadata API in Next.js?**
+
+The metadata API lets you define page titles, descriptions, and other SEO-related values in a centralized way.
+
+```ts
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "My App",
+    description: "A Next.js interview prep app",
+};
+```
+
+### **What is the role of `useRouter` in Next.js?**
+
+`useRouter` gives you access to the router object so you can navigate programmatically inside the client.
+
+```jsx
+import { useRouter } from "next/navigation";
+
+export default function Home() {
+    const router = useRouter();
+
+    return <button onClick={() => router.push("/about")}>Go to About</button>;
+}
+```
+
+### **What is the difference between SSG and SSR in Next.js?**
+
+SSG generates pages at build time for fast delivery, while SSR generates pages on each request for fresh data.
+
+```jsx
+export async function getStaticProps() {
+    return {
+        props: { time: new Date().toISOString() },
+    };
+}
+```
+
+### **What are route handlers in Next.js?**
+
+Route handlers let you define API endpoints inside the app directory, making it easy to create backend logic without a separate server.
+
+```ts
+import { NextResponse } from "next/server";
+
+export async function GET() {
+    return NextResponse.json({ message: "Hello from Next.js" });
+}
+```
+
+### **How does Next.js handle caching for fetch requests?**
+
+Next.js can cache fetch results automatically, which helps reduce duplicate network requests and improves performance.
+
+```tsx
+async function getData() {
+    const res = await fetch("https://api.example.com/posts");
+    return res.json();
+}
+```
